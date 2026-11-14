@@ -1,0 +1,19 @@
+{
+  "name": "bwitt-unspamify",
+  "version": "0.1.0",
+  "author": "Brian Witt",
+  "summary": "Removes advertising from Ubuntu (APT news, ESM nags, motd-news)",
+  "license": "MIT",
+  "source": "https://github.com/bwitt/puppet-unspamify",
+  "project_page": "https://github.com/bwitt/puppet-unspamify",
+  "issues_url": "https://github.com/bwitt/puppet-unspamify/issues",
+  "dependencies": [
+    { "name": "puppetlabs/stdlib", "version_requirement": ">= 9.0.0 < 11.0.0" }
+  ],
+  "operatingsystem_support": [
+    { "operatingsystem": "Ubuntu", "operatingsystemrelease": ["22.04", "24.04", "26.04"] }
+  ],
+  "requirements": [
+    { "name": "openvox", "version_requirement": ">= 8.0.0 < 10.0.0" }
+  ]
+}

@@ -1,6 +1,9 @@
 # Puppet module for removing Ubuntu advertising
 
 [![CI](https://github.com/bwitt/puppet-unspamify/actions/workflows/ci.yml/badge.svg)](https://github.com/bwitt/puppet-unspamify/actions/workflows/ci.yml)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/bwitt/unspamify.svg)](https://forge.puppet.com/modules/bwitt/unspamify)
+[![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/bwitt/unspamify.svg)](https://forge.puppet.com/modules/bwitt/unspamify)
+[![Puppet Forge - scores](https://img.shields.io/puppetforge/f/bwitt/unspamify.svg)](https://forge.puppet.com/modules/bwitt/unspamify)
 [![License](https://img.shields.io/github/license/bwitt/puppet-unspamify.svg)](https://github.com/bwitt/puppet-unspamify/blob/main/LICENSE)
 
 ## Table of Contents
@@ -10,7 +13,7 @@
 * [Reference](#reference)
 * [Limitations](#limitations)
 * [Development](#development)
-* [Credits](#credits)
+* [Author](#author)
 
 ## Description
 
@@ -98,9 +101,12 @@ Regenerate `REFERENCE.md` after changing parameters:
 bundle exec rake strings:generate:reference
 ```
 
-## Credits
+## Author
 
-Based on [UnspamifyUbuntu](https://github.com/Skyedra/UnspamifyUbuntu) by
-Skye. `files/fake-ubuntu-advantage-tools.deb` is redistributed unmodified
-from that project under the MIT license; see
+This module is written and maintained by [Brian Witt](https://github.com/bwitt)
+and released under the MIT license; see [LICENSE](LICENSE).
+
+It's based on [UnspamifyUbuntu](https://github.com/Skyedra/UnspamifyUbuntu) by
+Skye. `files/fake-ubuntu-advantage-tools.deb` is redistributed unmodified from
+that project under the MIT license; see
 [files/fake-ubuntu-advantage-tools.LICENSE](files/fake-ubuntu-advantage-tools.LICENSE).

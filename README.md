@@ -14,50 +14,36 @@
 
 ## Description
 
-This module applies the recommendations from
-[UnspamifyUbuntu](https://github.com/Skyedra/UnspamifyUbuntu) to remove
-advertising from Ubuntu:
-
-* Replaces `ubuntu-pro-client` / `ubuntu-advantage-tools` with the
-  `fake-ubuntu-advantage-tools` stub package, which removes the
-  "Try Ubuntu Pro" messages from APT. The stub ships minimal Python modules so
-  update-manager and software-properties keep working.
-* Removes the cached ESM announcement shown at login.
-* Removes the APT hook (`/etc/apt/apt.conf.d/20apt-esm-hook.conf`) that tries
-  to start `apt-news.service` and `esm-cache.service`.
-* Disables dynamic MOTD news (`ENABLED=0` in `/etc/default/motd-news`).
-* Optionally patches `apt_check.py` to stop the "ESM Apps is not enabled"
-  login messages.
-* Optionally keeps `distro-info`, which otherwise becomes an autoremove
-  candidate.
+Applies the recommendations from
+[UnspamifyUbuntu](https://github.com/Skyedra/UnspamifyUbuntu)
+to remove Ubuntu Pro, ESM and MOTD advertising from APT,
+login messages and Software Updater.
+See [REFERENCE.md](REFERENCE.md) for what each parameter does.
 
 ## Usage
-
-Apply the defaults:
 
 ```puppet
 include unspamify
 ```
 
-Keep `distro-info` and patch `apt_check.py` too:
-
-```puppet
-class { 'unspamify':
-  keep_distro_info => true,
-  patch_apt_check  => true,
-}
-```
-
-Or with Hiera:
+Opt-in extras, here via Hiera:
 
 ```yaml
 unspamify::keep_distro_info: true
 unspamify::patch_apt_check: true
+unspamify::patch_livepatch_tip: true
 ```
 
-Don't use this module on hosts that need Ubuntu Pro (ESM, Livepatch, etc.):
-`replace_ua_tools` removes the Pro client. Set it to `false` to keep the
-client while still disabling MOTD news and the APT hook.
+The defaults remove the Ubuntu Pro client,
+so on hosts that need Pro (ESM, Livepatch, etc.)
+keep it and just hide APT news:
+
+```puppet
+class { 'unspamify':
+  replace_ua_tools => false,
+  disable_apt_news => true,
+}
+```
 
 ## Reference
 
@@ -65,15 +51,9 @@ See [REFERENCE.md](REFERENCE.md).
 
 ## Limitations
 
-* Ubuntu only; the class fails on any other OS. Tested on 22.04, 24.04 and
-  26.04.
-* `disable_motd_news` installs `motd-news-config` (normally pulled in by
-  `ubuntu-server`) so `/etc/default/motd-news` always exists and stays
-  disabled.
-* `patch_apt_check` edits `/usr/lib/update-notifier/apt_check.py`, which is
-  owned by `update-notifier-common`. A package upgrade restores the original
-  file and the next Puppet run patches it again. The original is saved as
-  `apt_check.py.orig`.
+* Ubuntu only.
+* `patch_apt_check` and `patch_livepatch_tip` edit packaged files; upgrades
+  revert them until the next Puppet run.
 
 ## Development
 

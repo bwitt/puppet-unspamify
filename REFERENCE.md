@@ -27,9 +27,13 @@ include unspamify
 The following parameters are available in the `unspamify` class:
 
 * [`replace_ua_tools`](#-unspamify--replace_ua_tools)
+* [`purge_ua_tools`](#-unspamify--purge_ua_tools)
 * [`disable_esm_hook`](#-unspamify--disable_esm_hook)
 * [`disable_motd_news`](#-unspamify--disable_motd_news)
+* [`hide_esm_motd`](#-unspamify--hide_esm_motd)
 * [`patch_apt_check`](#-unspamify--patch_apt_check)
+* [`patch_livepatch_tip`](#-unspamify--patch_livepatch_tip)
+* [`disable_apt_news`](#-unspamify--disable_apt_news)
 * [`keep_distro_info`](#-unspamify--keep_distro_info)
 
 ##### <a name="-unspamify--replace_ua_tools"></a>`replace_ua_tools`
@@ -39,6 +43,16 @@ Data type: `Boolean`
 Replace ubuntu-advantage-tools with the fake-ubuntu-advantage-tools stub
 package, which removes the "Try Ubuntu Pro" APT messages. Also removes any
 cached ESM announcement shown at login.
+
+Default value: `true`
+
+##### <a name="-unspamify--purge_ua_tools"></a>`purge_ua_tools`
+
+Data type: `Boolean`
+
+Purge the replaced Pro client packages, removing their leftover config
+files and the ads cached in /var/lib/ubuntu-advantage. Only applies with
+replace_ua_tools.
 
 Default value: `true`
 
@@ -60,13 +74,43 @@ Installs motd-news-config, which owns that file.
 
 Default value: `true`
 
+##### <a name="-unspamify--hide_esm_motd"></a>`hide_esm_motd`
+
+Data type: `Boolean`
+
+Create /var/lib/update-notifier/hide-esm-in-motd, which tells
+update-notifier to stop printing the "ESM Apps is not enabled" messages at
+login. Survives package upgrades.
+
+Default value: `true`
+
 ##### <a name="-unspamify--patch_apt_check"></a>`patch_apt_check`
 
 Data type: `Boolean`
 
 Patch /usr/lib/update-notifier/apt_check.py so it no longer prints the
 "ESM Apps is not enabled" messages at login. Opt-in, because it edits a
-file owned by update-notifier-common.
+file owned by update-notifier-common. Only needed with an update-notifier
+too old for hide_esm_motd.
+
+Default value: `false`
+
+##### <a name="-unspamify--patch_livepatch_tip"></a>`patch_livepatch_tip`
+
+Data type: `Boolean`
+
+Patch /usr/lib/python3/dist-packages/UpdateManager/Dialogs.py so Software
+Updater stops showing the Livepatch tip (desktop only). Opt-in, because it
+edits a file owned by update-manager.
+
+Default value: `false`
+
+##### <a name="-unspamify--disable_apt_news"></a>`disable_apt_news`
+
+Data type: `Boolean`
+
+Run `pro config set apt_news=false` to hide APT news on hosts that keep the
+real Pro client. Requires replace_ua_tools => false.
 
 Default value: `false`
 

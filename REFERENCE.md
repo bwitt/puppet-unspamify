@@ -27,6 +27,8 @@ include unspamify
 The following parameters are available in the `unspamify` class:
 
 * [`replace_ua_tools`](#-unspamify--replace_ua_tools)
+* [`ua_tools_source`](#-unspamify--ua_tools_source)
+* [`ua_tools_checksum`](#-unspamify--ua_tools_checksum)
 * [`purge_ua_tools`](#-unspamify--purge_ua_tools)
 * [`disable_esm_hook`](#-unspamify--disable_esm_hook)
 * [`disable_motd_news`](#-unspamify--disable_motd_news)
@@ -45,6 +47,24 @@ package, which removes the "Try Ubuntu Pro" APT messages. Also removes any
 cached ESM announcement shown at login.
 
 Default value: `true`
+
+##### <a name="-unspamify--ua_tools_source"></a>`ua_tools_source`
+
+Data type: `Stdlib::Filesource`
+
+Where to fetch the fake-ubuntu-advantage-tools deb. Defaults to the
+upstream GitHub release; point it at a mirror for hosts without internet
+access. Installed again whenever its version changes.
+
+Default value: `'https://github.com/Skyedra/UnspamifyUbuntu/releases/download/v0.6/fake-ubuntu-advantage-tools.deb'`
+
+##### <a name="-unspamify--ua_tools_checksum"></a>`ua_tools_checksum`
+
+Data type: `String[1]`
+
+SHA-256 of the deb at ua_tools_source.
+
+Default value: `'2b4c0cc2648c08b99e7c520cc8a221b95995ad6f9a2f8ebe040e0f9f097546ce'`
 
 ##### <a name="-unspamify--purge_ua_tools"></a>`purge_ua_tools`
 

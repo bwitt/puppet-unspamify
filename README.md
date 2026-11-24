@@ -52,6 +52,8 @@ See [REFERENCE.md](REFERENCE.md).
 ## Limitations
 
 * Ubuntu only.
+* By default the stub deb is downloaded from GitHub; set `ua_tools_source`
+  (and `ua_tools_checksum`) to a mirror for hosts without internet access.
 * `patch_apt_check` and `patch_livepatch_tip` edit packaged files; upgrades
   revert them until the next Puppet run.
 
@@ -81,6 +83,5 @@ bundle exec rake strings:generate:reference
 ## Credits
 
 Based on [UnspamifyUbuntu](https://github.com/Skyedra/UnspamifyUbuntu) by
-Skye. `files/fake-ubuntu-advantage-tools.deb` is redistributed unmodified
-from that project under the MIT license; see
-[files/fake-ubuntu-advantage-tools.LICENSE](files/fake-ubuntu-advantage-tools.LICENSE).
+Skye. The fake-ubuntu-advantage-tools deb is downloaded from that project's
+[releases](https://github.com/Skyedra/UnspamifyUbuntu/releases).

@@ -14,12 +14,15 @@ describe 'unspamify' do
 
         it do
           is_expected.to contain_file('/var/cache/unspamify/fake-ubuntu-advantage-tools.deb')
-            .with_source('puppet:///modules/unspamify/fake-ubuntu-advantage-tools.deb')
+            .with_source('https://github.com/Skyedra/UnspamifyUbuntu/releases/download/v0.6/fake-ubuntu-advantage-tools.deb')
+            .with_checksum('sha256')
+            .with_checksum_value('2b4c0cc2648c08b99e7c520cc8a221b95995ad6f9a2f8ebe040e0f9f097546ce')
         end
 
         it do
           is_expected.to contain_exec('install fake-ubuntu-advantage-tools')
             .with_command('apt-get install -y /var/cache/unspamify/fake-ubuntu-advantage-tools.deb')
+            .with_unless(%r{= "install ok installed \$\(dpkg-deb -f /var/cache/unspamify/fake-ubuntu-advantage-tools\.deb Version\)"\z})
             .that_requires('File[/var/cache/unspamify/fake-ubuntu-advantage-tools.deb]')
         end
 
@@ -81,6 +84,18 @@ describe 'unspamify' do
         it { is_expected.not_to contain_exec('install fake-ubuntu-advantage-tools') }
         it { is_expected.not_to contain_file('/var/lib/ubuntu-advantage/messages/motd-esm-announce') }
         it { is_expected.not_to contain_exec('purge ubuntu-advantage-tools') }
+      end
+
+      context 'with a mirrored deb' do
+        let(:params) { { ua_tools_source: 'https://mirror.example.com/fake.deb', ua_tools_checksum: 'a' * 64 } }
+
+        it { is_expected.to compile.with_all_deps }
+
+        it do
+          is_expected.to contain_file('/var/cache/unspamify/fake-ubuntu-advantage-tools.deb')
+            .with_source('https://mirror.example.com/fake.deb')
+            .with_checksum_value('a' * 64)
+        end
       end
 
       context 'with purge_ua_tools => false' do

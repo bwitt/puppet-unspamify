@@ -6,6 +6,12 @@
 #   Replace ubuntu-advantage-tools with the fake-ubuntu-advantage-tools stub
 #   package, which removes the "Try Ubuntu Pro" APT messages. Also removes any
 #   cached ESM announcement shown at login.
+# @param ua_tools_source
+#   Where to fetch the fake-ubuntu-advantage-tools deb. Defaults to the
+#   upstream GitHub release; point it at a mirror for hosts without internet
+#   access. Installed again whenever its version changes.
+# @param ua_tools_checksum
+#   SHA-256 of the deb at ua_tools_source.
 # @param purge_ua_tools
 #   Purge the replaced Pro client packages, removing their leftover config
 #   files and the ads cached in /var/lib/ubuntu-advantage. Only applies with
@@ -41,15 +47,17 @@
 #   include unspamify
 #
 class unspamify (
-  Boolean $replace_ua_tools    = true,
-  Boolean $purge_ua_tools      = true,
-  Boolean $disable_esm_hook    = true,
-  Boolean $disable_motd_news   = true,
-  Boolean $hide_esm_motd       = true,
-  Boolean $patch_apt_check     = false,
-  Boolean $patch_livepatch_tip = false,
-  Boolean $disable_apt_news    = false,
-  Boolean $keep_distro_info    = false,
+  Boolean            $replace_ua_tools    = true,
+  Stdlib::Filesource $ua_tools_source     = 'https://github.com/Skyedra/UnspamifyUbuntu/releases/download/v0.6/fake-ubuntu-advantage-tools.deb',
+  String[1]          $ua_tools_checksum   = '2b4c0cc2648c08b99e7c520cc8a221b95995ad6f9a2f8ebe040e0f9f097546ce',
+  Boolean            $purge_ua_tools      = true,
+  Boolean            $disable_esm_hook    = true,
+  Boolean            $disable_motd_news   = true,
+  Boolean            $hide_esm_motd       = true,
+  Boolean            $patch_apt_check     = false,
+  Boolean            $patch_livepatch_tip = false,
+  Boolean            $disable_apt_news    = false,
+  Boolean            $keep_distro_info    = false,
 ) {
   if $facts['os']['name'] != 'Ubuntu' {
     fail("${module_name} only supports Ubuntu, not ${facts['os']['name']}")
@@ -70,11 +78,13 @@ class unspamify (
     }
 
     file { $deb:
-      ensure => file,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0644',
-      source => "puppet:///modules/${module_name}/fake-ubuntu-advantage-tools.deb",
+      ensure         => file,
+      owner          => 'root',
+      group          => 'root',
+      mode           => '0644',
+      source         => $ua_tools_source,
+      checksum       => 'sha256',
+      checksum_value => $ua_tools_checksum,
     }
 
     # apt-get (not dpkg) resolves the Conflicts and removes
@@ -82,7 +92,7 @@ class unspamify (
     exec { 'install fake-ubuntu-advantage-tools':
       provider    => shell,
       command     => "apt-get install -y ${deb}",
-      unless      => "dpkg-query -W -f='\${Status}' fake-ubuntu-advantage-tools 2>/dev/null | grep -q '^install ok installed$'",
+      unless      => "test \"$(dpkg-query -W -f='\${Status} \${Version}' fake-ubuntu-advantage-tools 2>/dev/null)\" = \"install ok installed $(dpkg-deb -f ${deb} Version)\"",
       environment => ['DEBIAN_FRONTEND=noninteractive'],
       path        => ['/usr/bin', '/bin', '/usr/sbin', '/sbin'],
       require     => File[$deb],

@@ -1,6 +1,9 @@
 # Puppet module for removing Ubuntu advertising
 
 [![CI](https://github.com/bwitt/puppet-unspamify/actions/workflows/ci.yml/badge.svg)](https://github.com/bwitt/puppet-unspamify/actions/workflows/ci.yml)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/bwitt/unspamify.svg)](https://forge.puppet.com/modules/bwitt/unspamify)
+[![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/bwitt/unspamify.svg)](https://forge.puppet.com/modules/bwitt/unspamify)
+[![Puppet Forge - scores](https://img.shields.io/puppetforge/f/bwitt/unspamify.svg)](https://forge.puppet.com/modules/bwitt/unspamify)
 [![License](https://img.shields.io/github/license/bwitt/puppet-unspamify.svg)](https://github.com/bwitt/puppet-unspamify/blob/main/LICENSE)
 
 ## Table of Contents
